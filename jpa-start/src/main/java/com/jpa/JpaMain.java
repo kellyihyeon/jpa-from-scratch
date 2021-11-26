@@ -1,7 +1,6 @@
 package com.jpa;
 
 import javax.persistence.*;
-import java.util.List;
 
 public class JpaMain {
 
@@ -14,7 +13,15 @@ public class JpaMain {
         try {
             // manage transaction
             transaction.begin();
-            logic(entityManager);
+
+            // business logic
+            BusinessLogic.logic(entityManager);
+
+            // persistence context - detach(), clear(), close()
+            DetachedEntity.detached(entityManager);
+            
+            ClearExam.clearPersistenceContext(entityManager);
+
             transaction.commit();
 
         } catch (Exception e) {
@@ -22,34 +29,11 @@ public class JpaMain {
             System.out.println("message = " + e);
             transaction.rollback();
         } finally{
+
+            // 영속성 컨텍스트 종료
             entityManager.close();
         }
         entityManagerFactory.close();
 
-    }
-
-    // business logic
-    private static void logic(EntityManager em) {
-        String id = "nid1";
-        Member member = new Member();
-        member.setId(id);
-        member.setUsername("jay");
-        member.setAge(28);
-        System.out.println("member = " + member);
-
-        // 등록
-        em.persist(member);
-
-        // 수정
-        member.setAge(280);
-
-        final Member findMember = em.find(Member.class, id);
-        System.out.println("findMember.getUsername() = " + findMember.getUsername());
-        System.out.println("findMember.getAge() = " + findMember.getAge());
-
-        final List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
-        System.out.println("members.size() = " + members.size());
-
-        em.remove(member);
     }
 }
