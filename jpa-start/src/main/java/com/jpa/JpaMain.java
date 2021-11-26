@@ -19,7 +19,7 @@ public class JpaMain {
 
             // persistence context - detach(), clear(), close()
             DetachedEntity.detached(entityManager);
-            
+
             ClearExam.clearPersistenceContext(entityManager);
 
             transaction.commit();
