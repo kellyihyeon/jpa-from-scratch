@@ -14,7 +14,10 @@ public class JpaMain {
             tx.begin();
             // business logic
             testSave(em);
-            queryLogicJoin(em);
+//            queryLogicJoin(em);
+//            updateRelation(em);
+//            deleteRelation(em);
+//            biDirection(em);
             tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,7 +59,36 @@ public class JpaMain {
 
         for (Member member : resultList) {
             System.out.println("[query] member.getUsername() = " + member.getUsername());
+            System.out.println("member = " + member);
         }
 
     }
+
+    // 새로운 팀2로 수정
+    private static void updateRelation(EntityManager em) {
+        final Team team2 = new Team("team2", "팀2");
+        em.persist(team2);
+
+        final Member member1 = em.find(Member.class, "member1");
+        member1.setTeam(team2);
+        System.out.println("member1 = " + member1);
+    }
+
+    private static void deleteRelation(EntityManager em) {
+        final Member member1 = em.find(Member.class, "member1");
+        member1.setTeam(null);
+        System.out.println("member1 = " + member1);
+    }
+
+    private static void biDirection(EntityManager em) {
+
+        final Team team = em.find(Team.class, "team1");
+
+        final List<Member> members = team.getMembers();
+        for (Member member : members) {
+            System.out.println("member.getUsername() = " + member.getUsername());
+        }
+
+    }
+
 }
