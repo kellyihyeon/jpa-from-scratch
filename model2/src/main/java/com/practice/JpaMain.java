@@ -48,6 +48,8 @@ public class JpaMain {
         final Team team = findMember.getTeam();
         System.out.println("팀 이름 = " + team.getName());
 
+        System.out.println("size = " + team.getMembers().size());
+
     }
 
     private static void queryLogicJoin(EntityManager em) {
