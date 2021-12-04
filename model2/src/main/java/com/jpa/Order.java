@@ -28,6 +28,7 @@ public class Order {
     private OrderStatus status;
 
 
+    // 연관관계 메소드
     public void setMember(Member member) {
         if (this.member != null) {
             this.member.getOrders().remove(this);

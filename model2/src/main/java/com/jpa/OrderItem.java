@@ -20,6 +20,8 @@ public class OrderItem {
     private Order order;
 
     private int orderPrice;
+
+    // 주문 수량
     private int count;
 
 
