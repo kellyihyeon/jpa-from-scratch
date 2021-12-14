@@ -50,10 +50,10 @@ public class Main {
         final Orders orders = new Orders();
         orders.setMember(member1);
         orders.setProduct(productA);
-        orders.setOrderAmount(2);
-        orders.setOrderDate(LocalDate.now());
+        orders.setOrdersAmount(2);
+        orders.setOrdersDate(LocalDate.now());
         em.persist(orders);
-        System.out.println("order.getId() = " + orders.getId());
+        System.out.println("orders.getId() = " + orders.getId());
         System.out.println("persist - order");
     }
 
@@ -67,8 +67,8 @@ public class Main {
 
         System.out.println("member.getUsername() = " + member.getUsername());
         System.out.println("product.getName() = " + product.getName());
-        System.out.println("order.getOrderAmount() = " + orders.getOrderAmount());
-        System.out.println("order.getOrderDate() = " + orders.getOrderDate());
+        System.out.println("orders.getOrderAmount() = " + orders.getOrdersAmount());
+        System.out.println("orders.getOrderDate() = " + orders.getOrdersDate());
     }
 
 

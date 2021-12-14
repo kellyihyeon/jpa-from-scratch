@@ -19,9 +19,9 @@ public class Orders {
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
-    private int orderAmount;
+    private int ordersAmount;
 
-    private LocalDate orderDate;
+    private LocalDate ordersDate;
 
 
     public Long getId() {
@@ -48,19 +48,19 @@ public class Orders {
         this.product = product;
     }
 
-    public int getOrderAmount() {
-        return orderAmount;
+    public int getOrdersAmount() {
+        return ordersAmount;
     }
 
-    public void setOrderAmount(int orderAmount) {
-        this.orderAmount = orderAmount;
+    public void setOrdersAmount(int orderAmount) {
+        this.ordersAmount = orderAmount;
     }
 
-    public LocalDate getOrderDate() {
-        return orderDate;
+    public LocalDate getOrdersDate() {
+        return ordersDate;
     }
 
-    public void setOrderDate(LocalDate orderDate) {
-        this.orderDate = orderDate;
+    public void setOrdersDate(LocalDate orderDate) {
+        this.ordersDate = orderDate;
     }
 }
