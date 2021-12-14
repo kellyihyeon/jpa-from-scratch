@@ -4,6 +4,11 @@
     <persistence-unit name="my_jpa">
         <class>com.practice.Member</class>
         <class>com.practice.Team</class>
+        <class>com.practice.Locker</class>
+        <class>com.practice.Product</class>
+        <class>com.practice.MemberProduct</class>
+        <class>com.practice.MemberProductId</class>
+
 
 
         <properties>

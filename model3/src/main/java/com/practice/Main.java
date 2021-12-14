@@ -1,6 +1,7 @@
 package com.practice;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 public class Main {
 
@@ -13,7 +14,8 @@ public class Main {
         try {
             transaction.begin();
             // business logic
-            testSave(em);
+            save(em);
+            find(em);
 
             transaction.commit();
         } catch (Exception e) {
@@ -38,4 +40,48 @@ public class Main {
         em.persist(member2);
         em.persist(team1);
     }
+
+    // 다대다: 연결엔티티 - 저장
+    public static void save(EntityManager em) {
+        // 회원 저장
+        final Member member1 = new Member();
+        member1.setId("member1");
+        member1.setUsername("회원1");
+        em.persist(member1);
+
+        // 상품 저장
+        final Product productA = new Product();
+        productA.setId("productA");
+        productA.setName("상품1");
+        em.persist(productA);
+
+        // 회원상품 저장
+        // member, product, orderAmount, orderDate
+        final MemberProduct memberProduct = new MemberProduct();
+        memberProduct.setMember(member1);
+        memberProduct.setProduct(productA);
+        memberProduct.setOrderAmount(2);
+        memberProduct.setOrderDate(LocalDate.now());
+
+        em.persist(memberProduct);
+    }
+
+    // 다대다: 연결엔티티 - 조회
+    public static void find(EntityManager em) {
+        // 복합 기본 키 값 생성
+        final MemberProductId memberProductId = new MemberProductId();
+        memberProductId.setMember("member1");
+        memberProductId.setProduct("productA");
+
+        final MemberProduct memberProduct = em.find(MemberProduct.class, memberProductId);
+        final Member member = memberProduct.getMember();
+        final Product product = memberProduct.getProduct();
+
+        System.out.println("member.getUsername() = " + member.getUsername());
+        System.out.println("product.getName() = " + product.getName());
+        System.out.println("memberProduct.getOrderAmount() = " + memberProduct.getOrderAmount());
+        System.out.println("memberProduct.getOrderDate() = " + memberProduct.getOrderDate());
+    }
+
+
 }

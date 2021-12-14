@@ -1,20 +1,26 @@
 package com.practice;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Member {
 
     @Id
-    @GeneratedValue
     @Column(name = "MEMBER_ID")
-    private Long id;
+    private String id;
 
     private String username;
 
-    @ManyToOne
-    @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false)    // 읽기 전용
-    private Team team;
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberProduct> memberProducts;
+
+
+    @OneToOne(mappedBy = "member")
+    @JoinColumn(name = "LOCKER_ID")
+    private Locker locker;
+
 
     public Member() { }
 
@@ -23,11 +29,11 @@ public class Member {
     }
 
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -39,15 +45,4 @@ public class Member {
         this.username = username;
     }
 
-//    public Team getTeam() {
-//        return team;
-//    }
-//
-//    public void setTeam(Team team) {
-//        this.team = team;
-//
-//        if (!team.getMembers().contains(this)) {
-//            team.getMembers().add(this);
-//        }
-//    }
 }
