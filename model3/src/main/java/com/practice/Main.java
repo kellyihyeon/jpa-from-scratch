@@ -18,9 +18,11 @@ public class Main {
             find(em);
 
             transaction.commit();
+            System.out.println("commit 성공");
         } catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
+            System.out.println("error 발생: rollback");
         } finally {
             em.close();
         }
@@ -28,59 +30,45 @@ public class Main {
 
     }
 
-    public static void testSave(EntityManager em) {
-        final Member member1 = new Member("member1");
-        final Member member2 = new Member("member2");
 
-        final Team team1 = new Team("team1");
-        team1.getMembers().add(member1);
-        team1.getMembers().add(member2);
-
-        em.persist(member1);
-        em.persist(member2);
-        em.persist(team1);
-    }
-
-    // 다대다: 연결엔티티 - 저장
     public static void save(EntityManager em) {
         // 회원 저장
         final Member member1 = new Member();
         member1.setId("member1");
         member1.setUsername("회원1");
         em.persist(member1);
+        System.out.println("persist - member");
 
         // 상품 저장
         final Product productA = new Product();
         productA.setId("productA");
         productA.setName("상품1");
         em.persist(productA);
+        System.out.println("persist - product");
 
-        // 회원상품 저장
-        // member, product, orderAmount, orderDate
-        final MemberProduct memberProduct = new MemberProduct();
-        memberProduct.setMember(member1);
-        memberProduct.setProduct(productA);
-        memberProduct.setOrderAmount(2);
-        memberProduct.setOrderDate(LocalDate.now());
-
-        em.persist(memberProduct);
+        // 주문 저장
+        final Orders orders = new Orders();
+        orders.setMember(member1);
+        orders.setProduct(productA);
+        orders.setOrderAmount(2);
+        orders.setOrderDate(LocalDate.now());
+        em.persist(orders);
+        System.out.println("order.getId() = " + orders.getId());
+        System.out.println("persist - order");
     }
 
-    // 다대다: 연결엔티티 - 조회
-    public static void find(EntityManager em) {
-        // 복합 기본 키 값 생성
-        final MemberProductId memberProductId = new MemberProductId();
-        memberProductId.setMember("member1");
-        memberProductId.setProduct("productA");
 
-        final MemberProduct memberProduct = em.find(MemberProduct.class, memberProductId);
-        final Member member = memberProduct.getMember();
-        final Product product = memberProduct.getProduct();
+    public static void find(EntityManager em) {
+        Long orderId = 1L;
+        final Orders orders = em.find(Orders.class, orderId);
+
+        final Member member = orders.getMember();
+        final Product product = orders.getProduct();
 
         System.out.println("member.getUsername() = " + member.getUsername());
         System.out.println("product.getName() = " + product.getName());
-        System.out.println("memberProduct.getOrderAmount() = " + memberProduct.getOrderAmount());
-        System.out.println("memberProduct.getOrderDate() = " + memberProduct.getOrderDate());
+        System.out.println("order.getOrderAmount() = " + orders.getOrderAmount());
+        System.out.println("order.getOrderDate() = " + orders.getOrderDate());
     }
 
 
