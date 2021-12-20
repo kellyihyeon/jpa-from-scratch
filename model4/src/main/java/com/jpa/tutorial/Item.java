@@ -1,12 +1,11 @@
-package com.jpa.entity;
+package com.jpa.tutorial;
 
-import com.jpa.Category;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @DiscriminatorColumn(name = "DTYPE")
 public abstract class Item {
 
@@ -20,9 +19,6 @@ public abstract class Item {
     private int price;
 
     private int stockQuantity;
-
-    @ManyToMany(mappedBy = "items")
-    private List<Category> categories = new ArrayList<>();
 
 
     public Long getId() {
@@ -57,11 +53,4 @@ public abstract class Item {
         this.stockQuantity = stockQuantity;
     }
 
-    public List<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
 }

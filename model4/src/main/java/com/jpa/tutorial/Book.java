@@ -1,12 +1,10 @@
-package com.jpa.entity;
+package com.jpa.tutorial;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @DiscriminatorValue("B")
-@PrimaryKeyJoinColumn(name = "BOOK_ID")     // 자식 테이블 기본 키 컬럼명 재정의
 public class Book extends Item {
 
     private String author;
