@@ -5,6 +5,9 @@
         <class>com.jpa.tutorial.compositeprimarykey.Parent</class>
         <class>com.jpa.tutorial.compositeprimarykey.ParentId</class>
 
+        <class>com.jpa.tutorial.compositeprimarykey.Board</class>
+        <class>com.jpa.tutorial.compositeprimarykey.BoardDetail</class>
+
 
         <properties>
 

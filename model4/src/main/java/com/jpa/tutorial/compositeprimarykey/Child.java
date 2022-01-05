@@ -5,10 +5,11 @@ import javax.persistence.*;
 @Entity
 public class Child {
 
-    @EmbeddedId     // pk
-    private ChildId id;
+    @Id
+    @GeneratedValue
+    @Column(name = "CHILD_ID")
+    private Long id;
 
-    @MapsId("parentId") // pk
     @ManyToOne          // fk
     @JoinColumn(name = "PARENT_ID")
     public Parent parent;
@@ -25,11 +26,11 @@ public class Child {
         this.parent = parent;
     }
 
-    public ChildId getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(ChildId id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -5,18 +5,19 @@ import javax.persistence.*;
 @Entity
 public class Parent {
 
-    @Id     // pk
+    @Id
+    @GeneratedValue
     @Column(name = "PARENT_ID")
-    private String id;
+    private Long id;
 
     private String name;
 
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
