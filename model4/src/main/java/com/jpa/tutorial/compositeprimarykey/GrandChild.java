@@ -3,20 +3,19 @@ package com.jpa.tutorial.compositeprimarykey;
 import javax.persistence.*;
 
 @Entity
-@IdClass(GrandChildId.class)
 public class GrandChild {
 
-    @Id
-    @ManyToOne
+    @EmbeddedId     // pk
+    private GrandChildId id;
+
+    @MapsId("childId")   // pk
+    @ManyToOne          // fk
     @JoinColumns({
             @JoinColumn(name = "PARENT_ID"),
             @JoinColumn(name = "CHILD_ID")
     })
     private Child child;
 
-    @Id
-    @Column(name = "CRANDCHILD_ID")
-    private String id;
 
     private String name;
 
@@ -30,11 +29,11 @@ public class GrandChild {
         this.child = child;
     }
 
-    public String getId() {
+    public GrandChildId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(GrandChildId id) {
         this.id = id;
     }
 

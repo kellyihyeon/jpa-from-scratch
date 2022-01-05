@@ -3,17 +3,16 @@ package com.jpa.tutorial.compositeprimarykey;
 import javax.persistence.*;
 
 @Entity
-@IdClass(ChildId.class)
 public class Child {
 
-    @Id
-    @ManyToOne
+    @EmbeddedId     // pk
+    private ChildId id;
+
+    @MapsId("parentId") // pk
+    @ManyToOne          // fk
     @JoinColumn(name = "PARENT_ID")
     public Parent parent;
 
-    @Id
-    @Column(name = "CHILD_ID")
-    private String childId;
 
     private String name;
 
@@ -26,12 +25,12 @@ public class Child {
         this.parent = parent;
     }
 
-    public String getChildId() {
-        return childId;
+    public ChildId getId() {
+        return id;
     }
 
-    public void setChildId(String childId) {
-        this.childId = childId;
+    public void setId(ChildId id) {
+        this.id = id;
     }
 
     public String getName() {
