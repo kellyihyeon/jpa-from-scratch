@@ -18,8 +18,6 @@ public class Main {
             final Parent parent = new Parent();
             final ParentId parentId = new ParentId("myId1", "myId2");
 
-            parent.setId(parentId);
-            parent.setName("parentName");
             em.persist(parent);
 
             final Parent findParent = em.find(Parent.class, parentId);
