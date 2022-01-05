@@ -3,6 +3,11 @@ package com.jpa.tutorial.compositeprimarykey;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "BOARD")
+@SecondaryTable(
+        name = "BOARD_DETAIL",
+        pkJoinColumns = @PrimaryKeyJoinColumn(name = "BOARD_DETAIL_ID")
+)
 public class Board {
 
     @Id
@@ -12,8 +17,8 @@ public class Board {
 
     private String title;
 
-    @OneToOne(mappedBy = "board")
-    private BoardDetail boardDetail;
+    @Column(table = "BOARD_DETAIL")
+    private String content;
 
     public Long getId() {
         return id;
@@ -31,11 +36,11 @@ public class Board {
         this.title = title;
     }
 
-    public BoardDetail getBoardDetail() {
-        return boardDetail;
+    public String getContent() {
+        return content;
     }
 
-    public void setBoardDetail(BoardDetail boardDetail) {
-        this.boardDetail = boardDetail;
+    public void setContent(String content) {
+        this.content = content;
     }
 }
