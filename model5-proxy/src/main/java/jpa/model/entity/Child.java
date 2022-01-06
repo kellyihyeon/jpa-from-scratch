@@ -27,4 +27,12 @@ public class Child {
     public void setParent(Parent parent) {
         this.parent = parent;
     }
+
+    @Override
+    public String toString() {
+        return "Child{" +
+                "id=" + id +
+                ", parent id=" + parent.getId() +
+                '}';
+    }
 }
