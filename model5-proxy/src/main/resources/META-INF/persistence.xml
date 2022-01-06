@@ -5,6 +5,8 @@
         <class>jpa.model.entity.Member</class>
         <class>jpa.model.entity.Team</class>
         <class>jpa.model.entity.Order</class>
+        <class>jpa.model.entity.Parent</class>
+        <class>jpa.model.entity.Child</class>
 
 
 

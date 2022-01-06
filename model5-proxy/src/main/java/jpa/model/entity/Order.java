@@ -10,7 +10,6 @@ public class Order {
     private String id;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     public Order() {

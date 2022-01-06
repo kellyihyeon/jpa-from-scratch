@@ -1,8 +1,7 @@
 package jpa.model;
 
-import jpa.model.entity.Member;
-import jpa.model.entity.Order;
-import jpa.model.entity.Team;
+import jpa.model.entity.*;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -21,9 +20,8 @@ public class Main {
             transaction.begin();
             // business logic
             createMember(em);
-//            printUserAndTeam(em);
-//            printOnlyUser(em);
-            printCollectionRapper(em);
+
+            saveWithCascade(em);
 
 
             transaction.commit();
@@ -39,16 +37,56 @@ public class Main {
 
     }
 
+    private static void saveWithCascade(EntityManager em) {
+        final Child child1 = new Child();
+        final Child child2 = new Child();
+
+        final Parent parent = new Parent();
+        child1.setParent(parent);
+        child2.setParent(parent);
+
+        parent.getChildren().add(child1);
+        parent.getChildren().add(child2);
+
+        em.persist(parent);
+        System.out.println("child1에서 parent id 접근 = " + child1.getParent().getId());
+        System.out.println("child2에서 parent id 접근 = " + child2.getParent().getId());
+
+        final Parent findParent = em.find(Parent.class, 1L);
+        em.remove(findParent);
+
+    }
+
+    private static void saveNoCascade(EntityManager em) {
+        final Parent parent = new Parent();
+        em.persist(parent);
+
+        final Child child1 = new Child();
+        child1.setParent(parent);      // 자식 -> 부모와 연관관계 설정
+        // parent.getChildren() 할 때 이미 null 아니냐고 ->  parent.getChildren() = [] !!!!!
+        System.out.println("parent.getChildren() = " + parent.getChildren());
+        parent.getChildren().add(child1);   // 부모 -> 자식
+        em.persist(child1);
+
+        final Child child2 = new Child();
+        child2.setParent(parent);
+        parent.getChildren().add(child2);
+        em.persist(child2);
+    }
+
     private static void printCollectionRapper(EntityManager em) {
         final Member member = em.find(Member.class, "멤버1");
         System.out.println("member = " + member);   // order = null
 
         final Order order = new Order("주문1", member);
         em.persist(order);
+
         System.out.println("order = " + order);
-//
-//        final List<Order> orders = member.getOrders();
-//        System.out.println("orders.getClass().getName() = " + orders.getClass().getName());
+        /**
+         *
+         */
+        final List<Order> orders = member.getOrders();
+        System.out.println("orders.getClass().getName() = " + orders.getClass().getName());
     }
 
     private static void printOnlyUser(EntityManager em) {
