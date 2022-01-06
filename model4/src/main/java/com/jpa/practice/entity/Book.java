@@ -1,4 +1,4 @@
-package com.jpa.tutorial;
+package com.jpa.practice.entity;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

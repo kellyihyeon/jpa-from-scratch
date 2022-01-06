@@ -1,11 +1,11 @@
-package com.jpa.tutorial;
+package com.jpa.practice.entity;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("M")
-public class Movie extends Item{
+public class Movie extends Item {
 
     private String director;
 

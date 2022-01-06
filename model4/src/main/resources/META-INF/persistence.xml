@@ -8,6 +8,8 @@
         <class>com.jpa.tutorial.compositeprimarykey.Board</class>
         <class>com.jpa.tutorial.compositeprimarykey.BoardDetail</class>
 
+        <class>com.jpa.practice.Member</class>
+
 
         <properties>
 
