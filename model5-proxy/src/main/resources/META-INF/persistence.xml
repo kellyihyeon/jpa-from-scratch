@@ -2,11 +2,24 @@
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
 
     <persistence-unit name="my_jpa">
-        <class>jpa.model.entity.Member</class>
+<!--        <class>jpa.model.entity.Member</class>-->
         <class>jpa.model.entity.Team</class>
-        <class>jpa.model.entity.Order</class>
+<!--        <class>jpa.model.entity.Order</class>-->
         <class>jpa.model.entity.Parent</class>
         <class>jpa.model.entity.Child</class>
+
+        <class>jpa.practice.entity.item.Album</class>
+        <class>jpa.practice.entity.item.Book</class>
+        <class>jpa.practice.entity.item.Item</class>
+        <class>jpa.practice.entity.item.Movie</class>
+
+        <class>jpa.practice.entity.BaseEntity</class>
+        <class>jpa.practice.entity.Category</class>
+        <class>jpa.practice.entity.Delivery</class>
+        <class>jpa.practice.entity.Member</class>
+        <class>jpa.practice.entity.Order</class>
+        <class>jpa.practice.entity.OrderItem</class>
+
 
 
 
