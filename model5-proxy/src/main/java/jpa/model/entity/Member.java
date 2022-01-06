@@ -1,6 +1,7 @@
 package jpa.model.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Member {
@@ -11,9 +12,22 @@ public class Member {
 
     private String username;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Team team;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    private List<Order> orders;
+
+
+
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 
     public Member(String id, String username) {
         this.id = id;
@@ -46,5 +60,15 @@ public class Member {
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", team=" + team +
+                ", orders=" + orders +
+                '}';
     }
 }

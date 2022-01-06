@@ -4,6 +4,7 @@
     <persistence-unit name="my_jpa">
         <class>jpa.model.entity.Member</class>
         <class>jpa.model.entity.Team</class>
+        <class>jpa.model.entity.Order</class>
 
 
 

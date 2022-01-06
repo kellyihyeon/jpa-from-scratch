@@ -1,11 +1,13 @@
 package jpa.model;
 
 import jpa.model.entity.Member;
+import jpa.model.entity.Order;
 import jpa.model.entity.Team;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class Main {
 
@@ -19,8 +21,9 @@ public class Main {
             transaction.begin();
             // business logic
             createMember(em);
-            printUserAndTeam(em);
-            printOnlyUser(em);
+//            printUserAndTeam(em);
+//            printOnlyUser(em);
+            printCollectionRapper(em);
 
 
             transaction.commit();
@@ -34,6 +37,18 @@ public class Main {
         }
         emf.close();
 
+    }
+
+    private static void printCollectionRapper(EntityManager em) {
+        final Member member = em.find(Member.class, "멤버1");
+        System.out.println("member = " + member);   // order = null
+
+        final Order order = new Order("주문1", member);
+        em.persist(order);
+        System.out.println("order = " + order);
+//
+//        final List<Order> orders = member.getOrders();
+//        System.out.println("orders.getClass().getName() = " + orders.getClass().getName());
     }
 
     private static void printOnlyUser(EntityManager em) {
@@ -54,8 +69,10 @@ public class Main {
         em.persist(team1);  // 컨텍스트에 넣고
 
         final Member member1 = new Member("멤버1", "가르시아");
+        final Member member2 = new Member("멤버2", "케이트");
         member1.setTeam(team1);
         em.persist(member1);    // 컨텍스트에 넣고
+        em.persist(member2);
 
     }
 
