@@ -1,6 +1,7 @@
 package jpa.model;
 
 import jpa.model.entity.Address;
+import jpa.model.entity.AddressEntity;
 import jpa.model.entity.Member;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,10 +22,6 @@ public class Main {
             // business logic
             System.out.println("비지니스 로직 시작!");
 
-            usingValueTypeCollection(em);
-
-            updateValueTypeCollection(em);
-
             transaction.commit();
 
         } catch (Exception e) {
@@ -39,59 +36,6 @@ public class Main {
 
     }
 
-    private static void updateValueTypeCollection(EntityManager em) {
-        final Member member = em.find(Member.class, 1L);
-
-        // 임베디드 값 타입 수정 (통영 -> 송도)
-        member.setHomeAddress(new Address("송도", "new street", "S98"));
-
-        // 기본 값 타입 컬렉션 수정
-        final Set<String> favoriteFoods = member.getFavoriteFoods();
-        favoriteFoods.remove("깐풍기");
-        favoriteFoods.add("팔보채");
-
-        // 임베디드 값 타입 컬렉션 수정
-        final List<Address> addressHistory = member.getAddressHistory();
-        addressHistory.remove(new Address("서울", "강남", "S45"));
-        addressHistory.add(new Address("전주", "칼국수거리", "J734"));
-
-        System.out.println("member = " + member);
-        for (String favoriteFood : favoriteFoods) {
-            System.out.println("favoriteFood = " + favoriteFood);
-        }
-        for (Address address : addressHistory) {
-            System.out.println("address = " + address);
-        }
-    }
-
-    private static void getValueTypeCollection(EntityManager em) {
-        final Member member = em.find(Member.class, 1L);
-        final Address homeAddress = member.getHomeAddress();
-        final Set<String> favoriteFoods = member.getFavoriteFoods();
-
-        for (String favoriteFood : favoriteFoods) {
-            System.out.println("favoriteFood = " + favoriteFood);
-        }
-        final List<Address> addressHistory = member.getAddressHistory();
-        System.out.println("address history 1번 = " + addressHistory.get(0));
-    }
-
-    private static void usingValueTypeCollection(EntityManager em) {
-        final Member member = new Member();
-        // Address = 임베디드 값 타입
-        member.setHomeAddress(new Address("통영", "몽돌해수욕장", "T"));
-
-        // Set<String> favoriteFoods = 기본값 타입 컬렉션
-        member.getFavoriteFoods().add("짬뽕");
-        member.getFavoriteFoods().add("간짜장");
-        member.getFavoriteFoods().add("깐풍기");
-
-        // List<Address> addressHistory = 임베디드 값 타입 컬렉션
-        member.getAddressHistory().add(new Address("서울", "강남", "S45"));
-        member.getAddressHistory().add(new Address("서울", "강북", "S46"));
-
-        em.persist(member);
-    }
 
     private static void usingImmutableObject(EntityManager em) {
         final Member member = new Member();
