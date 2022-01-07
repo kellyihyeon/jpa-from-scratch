@@ -1,6 +1,10 @@
 package jpa.model.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Member {
@@ -21,15 +25,21 @@ public class Member {
     @AttributeOverrides({
             @AttributeOverride(name="city", column =@Column(name = "COMPANY_CITY")),
             @AttributeOverride(name="street", column = @Column(name = "COMPANY_STREET")),
-            @AttributeOverride(name="state", column = @Column(name = "COMPANY_STATE")),
-//            @AttributeOverride(name="zipcode", column = @Column(name = "COMPANY_ZIPCODE")),
-//            @AttributeOverride(name="zip", column = @Column(name = "COMPANY_ZIP")),
-//            @AttributeOverride(name="plusFour", column = @Column(name = "COMPANY_PLUSFOUR"))
+            @AttributeOverride(name="state", column = @Column(name = "COMPANY_STATE"))
     })
     Address companyAddress;
 
     @Embedded
     PhoneNumber phoneNumber;
+
+    @ElementCollection  // 패치전략 = lazy 가 기본
+    @CollectionTable(name = "FAVORITE_FOODS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+    @Column(name = "FOOD_NAME")
+    private Set<String> favoriteFoods = new HashSet<>();
+
+    @ElementCollection
+    @CollectionTable(name = "ADDRESS_HISTORY", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+    private List<Address> addressHistory = new ArrayList<>();
 
 
     public Long getId() {
@@ -78,6 +88,22 @@ public class Member {
 
     public void setPhoneNumber(PhoneNumber phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Set<String> getFavoriteFoods() {
+        return favoriteFoods;
+    }
+
+    public void setFavoriteFoods(Set<String> favoriteFoods) {
+        this.favoriteFoods = favoriteFoods;
+    }
+
+    public List<Address> getAddressHistory() {
+        return addressHistory;
+    }
+
+    public void setAddressHistory(List<Address> addressHistory) {
+        this.addressHistory = addressHistory;
     }
 
     @Override

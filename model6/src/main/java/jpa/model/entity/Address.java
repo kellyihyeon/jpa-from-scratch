@@ -2,7 +2,7 @@ package jpa.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
+import java.util.Objects;
 
 @Embeddable
 public class Address {
@@ -46,5 +46,18 @@ public class Address {
                 ", street='" + street + '\'' +
                 ", state='" + state + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return Objects.equals(city, address.city) && Objects.equals(street, address.street) && Objects.equals(state, address.state);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(city, street, state);
     }
 }
