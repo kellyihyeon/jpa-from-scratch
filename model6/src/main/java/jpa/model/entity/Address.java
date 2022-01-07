@@ -8,45 +8,43 @@ import javax.persistence.Embedded;
 public class Address {
 
     @Column(name = "city")
-    String city;
+    private String city;
 
     String street;
 
     String state;
 
-//    @Embedded
-//    Zipcode zipcode;
 
+    // 기본 생성자
+    protected Address() {
+
+    }
+
+    // 생성자로만 값 설정 (수정자 만들지 않기)
+    public Address(String city, String street, String state) {
+        this.city = city;
+        this.street = street;
+        this.state = state;
+    }
 
     public String getCity() {
         return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public String getStreet() {
         return street;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
     public String getState() {
         return state;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    @Override
+    public String toString() {
+        return "Address{" +
+                "city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", state='" + state + '\'' +
+                '}';
     }
-
-//    public Zipcode getZipcode() {
-//        return zipcode;
-//    }
-//
-//    public void setZipcode(Zipcode zipcode) {
-//        this.zipcode = zipcode;
-//    }
 }
