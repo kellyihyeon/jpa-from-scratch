@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+
+    <persistence-unit name="my_jpa">
+        <class>jpa.model.entity.item.Album</class>
+        <class>jpa.model.entity.item.Book</class>
+        <class>jpa.model.entity.item.Item</class>
+        <class>jpa.model.entity.item.Movie</class>
+
+        <class>jpa.model.entity.Address</class>
+        <class>jpa.model.entity.Category</class>
+        <class>jpa.model.entity.Delivery</class>
+        <class>jpa.model.entity.DeliveryStatus</class>
+        <class>jpa.model.entity.Member</class>
+        <class>jpa.model.entity.Order</class>
+        <class>jpa.model.entity.OrderItem</class>
+        <class>jpa.model.entity.OrderStatus</class>
+
+
+        <properties>
+
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test"/>
+
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.use_sql_comments" value="true" />
+            <property name="hibernate.id.new_generator_mappings" value="true" />
+            <property name="hibernate.hbm2ddl.auto" value="create" />
+
+
+        </properties>
+    </persistence-unit>
+
+</persistence>
