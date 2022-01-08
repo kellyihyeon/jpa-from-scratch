@@ -16,20 +16,13 @@ public class JpaMain {
         try {
             tx.begin();
             // business logic
-            final Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
-
-            final Member member = new Member();
-            member.setUsername("Joy");
-            member.setAge(10);
-            member.setTeam(team);
-            em.persist(member);
+            createTeamAndMember(em);
 
             em.flush();
             em.clear();
 
-            createSubQuery(em);
+            createQueryUsingJpqlFunction(em);
+
 
             tx.commit();
 
@@ -41,6 +34,77 @@ public class JpaMain {
         }
 
         emf.close();
+    }
+
+    private static void createQueryUsingJpqlFunction(EntityManager em) {
+        String query = "select locate('de', 'abcdef') from Member m";
+        String query2 = "select size(t.members) from Team t";
+
+        final List<Integer> result = em.createQuery(query, Integer.class).getResultList();
+        for (Integer name : result) {
+            System.out.println("name = " + name);
+        }
+    }
+
+    private static void createQueryUsingCoalesceAndNullif(EntityManager em) {
+        final Member member = new Member();
+        member.setUsername("관리자");  // target
+        member.setAge(99);
+        em.persist(member);
+
+        String query =
+                "select coalesce(m.username, '이름 없는 회원') from Member m";
+
+        String query2 =
+                "select nullif(m.username, '관리자') from Member m";
+
+        final List<String> result = em.createQuery(query2, String.class).getResultList();
+        for (String name : result) {
+            System.out.println("name = " + name);
+        }
+    }
+
+    private static void createQueryUsingCase(EntityManager em) {
+        String query =
+                "select " +
+                        "case when m.age <= 10 then '학생요금' " +
+                        "when m.age >= 60 then '경로요금'" +
+                        "else '일반요금' " +
+                        "end " +
+                        "from Member m";
+        final List<String> result = em.createQuery(query, String.class).getResultList();
+
+        for (String fee : result) {
+            System.out.println("fee = " + fee);
+        }
+    }
+
+    private static void createTeamAndMember(EntityManager em) {
+        final Team team = new Team();
+        team.setName("teamA");
+        em.persist(team);
+
+        final Member member = new Member();
+        member.setUsername("Joy");
+        member.setAge(10);
+        member.setTeam(team);
+        member.setType(MemberType.USER);
+        em.persist(member);
+    }
+
+    private static void createQueryWithEnumType(EntityManager em) {
+        String query = "select m.username, 'HELLO', true from Member m " +
+                "where m.type = :userType";
+        List<Object[]> result = em.createQuery(query)
+                .setParameter("userType", MemberType.ADMIN)
+                .getResultList();
+
+        for (Object[] objects : result) {
+            System.out.println("objects = " + objects[0]);
+            System.out.println("objects = " + objects[1]);
+            System.out.println("objects = " + objects[2]);
+        }
+
     }
 
     private static void createSubQuery(EntityManager em) {
