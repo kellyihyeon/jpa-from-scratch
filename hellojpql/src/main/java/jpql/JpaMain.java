@@ -1,7 +1,6 @@
 package jpql;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -21,25 +20,8 @@ public class JpaMain {
 
             em.flush();
             em.clear();
+            
 
-
-            // Sql 에서 distinct 가 아니라, JPA 에서 distinct 해줌
-            String query = "Select t From Team t ";
-            final List<Team> result = em.createQuery(query, Team.class)
-                    .setFirstResult(0)
-                    .setMaxResults(2)
-                    .getResultList();
-
-            System.out.println("result = " + result.size());
-
-            for (Team team : result) {
-                System.out.println("team = " + team.getName() + ", | members = " + team.getMembers().size());
-                for (Member member : team.getMembers()) {
-                    System.out.println(" -> " + member);
-                }
-            }
-            // 회원 100명 조회 -> 쿼리가 100번 나감(team 이 다르다면): N + 1
-            // -> 페치 조인으로 푸는 수밖에 없다. -> ?? 이게 즉시로딩 아니야??
 
             tx.commit();
 
@@ -51,6 +33,31 @@ public class JpaMain {
         }
 
         emf.close();
+    }
+
+    private static void createQueryUsingNamedQuery(EntityManager em) {
+        final List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
+                .setParameter("username", "Kate")
+                .getResultList();
+
+        for (Member member : resultList) {
+            System.out.println("member = " + member);
+        }
+    }
+
+    private static void createQueryUsingEntityDirectly(EntityManager em) {
+        final Member kate = em.find(Member.class, 4L);
+        final Team teamA = em.find(Team.class, 1L);
+
+        String query = "Select m From Member m where m.team = :team";
+
+        List<Member> members = em.createQuery(query, Member.class)
+                .setParameter("team", teamA)
+                .getResultList();
+
+        for (Member member : members) {
+            System.out.println("member = " + member);
+        }
     }
 
     private static void createQueryUsingJpqlFunction(EntityManager em) {
