@@ -1,6 +1,7 @@
 package jpql;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -21,8 +22,19 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            createQueryUsingJpqlFunction(em);
 
+            // Sql 에서 distinct 가 아니라, JPA 에서 distinct 해줌
+            String query = "Select distinct t From Team t join fetch t.members";
+            final List<Team> result = em.createQuery(query, Team.class).getResultList();
+
+            for (Team team : result) {
+                System.out.println("team = " + team.getName() + ", | members = " + team.getMembers().size());
+                for (Member member : team.getMembers()) {
+                    System.out.println(" -> " + member);
+                }
+            }
+            // 회원 100명 조회 -> 쿼리가 100번 나감(team 이 다르다면): N + 1
+            // -> 페치 조인으로 푸는 수밖에 없다. -> ?? 이게 즉시로딩 아니야??
 
             tx.commit();
 
@@ -80,16 +92,35 @@ public class JpaMain {
     }
 
     private static void createTeamAndMember(EntityManager em) {
-        final Team team = new Team();
-        team.setName("teamA");
-        em.persist(team);
+        final Team teamA = new Team();
+        teamA.setName("teamA");
+        em.persist(teamA);
+
+        final Team teamB = new Team();
+        teamB.setName("teamB");
+        em.persist(teamB);
+
 
         final Member member = new Member();
         member.setUsername("Joy");
         member.setAge(10);
-        member.setTeam(team);
+        member.setTeam(teamA);
         member.setType(MemberType.USER);
         em.persist(member);
+
+        final Member member2 = new Member();
+        member2.setUsername("Kate");
+        member2.setAge(20);
+        member2.setTeam(teamA);
+        member2.setType(MemberType.USER);
+        em.persist(member2);
+
+        final Member member3 = new Member();
+        member3.setUsername("Dorothy");
+        member3.setAge(30);
+        member3.setTeam(teamB);
+        member3.setType(MemberType.USER);
+        em.persist(member3);
     }
 
     private static void createQueryWithEnumType(EntityManager em) {
