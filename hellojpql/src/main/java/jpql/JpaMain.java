@@ -24,8 +24,13 @@ public class JpaMain {
 
 
             // Sql 에서 distinct 가 아니라, JPA 에서 distinct 해줌
-            String query = "Select distinct t From Team t join fetch t.members";
-            final List<Team> result = em.createQuery(query, Team.class).getResultList();
+            String query = "Select t From Team t ";
+            final List<Team> result = em.createQuery(query, Team.class)
+                    .setFirstResult(0)
+                    .setMaxResults(2)
+                    .getResultList();
+
+            System.out.println("result = " + result.size());
 
             for (Team team : result) {
                 System.out.println("team = " + team.getName() + ", | members = " + team.getMembers().size());
