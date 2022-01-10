@@ -18,10 +18,11 @@ public class JpaMain {
             // business logic
             createTeamAndMember(em);
 
-            em.flush();
-            em.clear();
-            
+//            em.flush();
+//            em.clear();
 
+
+            updateUsingBulkOperation(em);
 
             tx.commit();
 
@@ -33,6 +34,24 @@ public class JpaMain {
         }
 
         emf.close();
+    }
+
+    private static void updateUsingBulkOperation(EntityManager em) {
+        // 벌크 연산 주의 -> 영속성 컨텍스트에는 반영이 안돼있음
+        // 스냅샷 비교해서 변경 감지 되는 거 아닌가???
+        int resultCount = em.createQuery("update Member m set m.age = 20")
+                .executeUpdate();
+
+        System.out.println("resultCount = " + resultCount);
+
+        em.clear(); // 벌크 연산 수행 후에는 영속성 컨텍스트를 초기화하자.
+
+        final List<Member> allMembers = em.createQuery("select m from Member m", Member.class)
+                .getResultList();
+
+        for (Member member : allMembers) {
+            System.out.println("member = " + member);
+        }
     }
 
     private static void createQueryUsingNamedQuery(EntityManager em) {
