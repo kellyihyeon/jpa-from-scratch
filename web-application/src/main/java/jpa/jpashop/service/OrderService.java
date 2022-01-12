@@ -2,7 +2,6 @@ package jpa.jpashop.service;
 
 import jpa.jpashop.domain.*;
 import jpa.jpashop.domain.item.Item;
-import jpa.jpashop.repositoty.ItemRepository;
 import jpa.jpashop.repositoty.MemberRepository;
 import jpa.jpashop.repositoty.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
