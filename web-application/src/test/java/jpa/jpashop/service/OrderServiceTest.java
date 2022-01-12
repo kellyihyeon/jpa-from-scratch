@@ -8,7 +8,6 @@ import jpa.jpashop.domain.item.Book;
 import jpa.jpashop.domain.item.Item;
 import jpa.jpashop.exception.NotEnoughStockException;
 import jpa.jpashop.repositoty.OrderRepository;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +89,7 @@ public class OrderServiceTest {
         assertEquals("주문이 취소된 상품은 주문수량만큼 재고가 증가해야 한다.", 30, item.getStockQuantity());
     }
 
-    
+
     private Book createBook(String name, int price, int stockQuantity) {
         Book book = new Book();
         book.setName(name);
