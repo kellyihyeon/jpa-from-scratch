@@ -38,7 +38,7 @@
 
     <jsp:include page="../fragments/footer.jsp" />
 
-</div> <!-- /container -->
+</div>
 
 </body>
 </html>
