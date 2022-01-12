@@ -1,6 +1,7 @@
 package jpa.jpashop.domain.item;
 
 import jpa.jpashop.domain.Category;
+import jpa.jpashop.exception.NotEnoughStockException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,6 +27,18 @@ public abstract class Item {
     private List<Category> categories = new ArrayList<>();
 
 
+    // 재고 관련 비즈니스 로직
+    public void addStock(int quantity) {    // 고객이 주문 취소했을 때 재고 다시 돌려놔야 하므로
+        this.stockQuantity += quantity;
+    }
+
+    public void removeStock(int quantity) {
+        int restStock = this.stockQuantity - quantity;
+        if (restStock < 0) {
+            throw new NotEnoughStockException("need more stock!");
+        }
+        this.stockQuantity = restStock;
+    }
 
     public Long getId() {
         return id;
