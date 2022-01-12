@@ -25,7 +25,27 @@ public class OrderItem {
 
     private int count;
 
+    // 주문 아이템 생성
+    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);  // 책 | 5권
 
+        item.removeStock(count);    // 재고수량 조정
+        return orderItem;
+    }
+
+
+    // 주문 취소
+    public void cancel() {
+        getItem().addStock(count);
+    }
+
+    // 주문 총 가격 구하기
+    public int getTotalPrice() {
+        return getOrderPrice() * getCount();
+    }
 
     public Long getId() {
         return id;
