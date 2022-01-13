@@ -1,4 +1,4 @@
-package jpa.jpashop.servoce;
+package jpa.jpashop.service;
 
 import jpa.jpashop.domain.*;
 import jpa.jpashop.domain.item.Item;

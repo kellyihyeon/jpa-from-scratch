@@ -43,6 +43,21 @@
             <version>4.3.10.Final</version>
         </dependency>
 
+        <!--QueryDSL-->
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>3.6.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>3.6.3</version>
+        </dependency>
+
+
         <!--h2 database-->
         <dependency>
             <groupId>com.h2database</groupId>
