@@ -1,7 +1,5 @@
 package jpa.jpasample.domain;
 
-import jpa.jpasample.domain.Member;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;

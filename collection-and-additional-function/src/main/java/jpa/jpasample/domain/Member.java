@@ -1,5 +1,7 @@
 package jpa.jpasample.domain;
 
+import jpa.jpasample.BooleanToYNConverter;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +16,9 @@ public class Member {
 
     @ManyToOne
     private Team team;
+
+
+    private boolean vip;
 
 
     public Long getId() {
