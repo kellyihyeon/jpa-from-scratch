@@ -1,7 +1,5 @@
 package jpa.jpasample.domain;
 
-import jpa.jpasample.BooleanToYNConverter;
-
 import javax.persistence.*;
 
 @Entity
