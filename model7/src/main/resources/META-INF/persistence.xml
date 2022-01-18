@@ -15,6 +15,7 @@
         <class>jpa.model.entity.Order</class>
         <class>jpa.model.entity.OrderItem</class>
         <class>jpa.model.entity.OrderStatus</class>
+        <class>jpa.model.entity.Product</class>
 
 
         <properties>

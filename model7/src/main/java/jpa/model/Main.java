@@ -2,6 +2,8 @@ package jpa.model;
 
 import jpa.model.entity.Address;
 import jpa.model.entity.Member;
+import jpa.model.entity.Product;
+import org.hibernate.*;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -19,8 +21,7 @@ public class Main {
 
         try {
             // business logic
-            createMember(em);
-            createQuerySqlUsingNativeSql(em);
+
 
             tx.commit();
 
@@ -32,6 +33,71 @@ public class Main {
             em.close();
         }
         emf.close();
+    }
+
+    private static void batchForHibernateStatelessSession(EntityManagerFactory emf) {
+        SessionFactory sessionFactory = emf.unwrap(SessionFactory.class);
+        StatelessSession session = sessionFactory.openStatelessSession();   // 무상태 세션 = 영속성 컨텍스트가 없다.
+        Transaction transaction = session.beginTransaction();
+        ScrollableResults scroll = session.createQuery("select p from Product p").scroll();
+
+        while (scroll.next()) {
+            Product p = (Product) scroll.get(0);
+            p.setPrice(p.getPrice() + 100);
+            session.update(p);  // 업데이트 직접 호출
+        }
+        transaction.commit();
+        session.close();
+    }
+
+    private static void batchForHibernateScroll(EntityManager em) {
+        Session session = em.unwrap(Session.class);
+        ScrollableResults scroll = session.createQuery("select p from Product p")
+                                        .setCacheMode(CacheMode.IGNORE)     // 2차 캐시 기능 끄기
+                                        .scroll(ScrollMode.FORWARD_ONLY);
+
+        int count = 0;
+
+        while (scroll.next()) {
+            Product p = (Product) scroll.get(0);
+            p.setPrice(p.getPrice() + 100);
+
+            count++;
+            if (count % 100 == 0) {
+                session.flush();
+                session.clear();    // 영속성 컨텍스트 초기화
+            }
+        }
+    }
+
+    private static void batchForJpaPaging(EntityManager em) {
+        int pageSize = 100;
+        for (int i = 0; i < 10; i++) {
+            List<Product> resultList =
+                    em.createQuery("select p from Product p", Product.class)
+                                            .setFirstResult(i * pageSize)
+                                            .setMaxResults(pageSize)
+                                            .getResultList();
+
+            for (Product product : resultList) {
+                product.setPrice(product.getPrice() + 100);
+            }
+            em.flush();
+            em.clear();
+        }
+    }
+
+    private static void batchForCreateProduct(EntityManager em) {
+        for (int i = 0; i < 35; i++) {
+            Product product = new Product("item" + i, 10000);
+            em.persist(product);
+
+            if (i % 10 == 0) {
+                System.out.println(i+"번째 데이터 flush and clear !");
+                em.flush();
+                em.clear();
+            }
+        }
     }
 
     private static void createQuerySqlUsingNativeSql(EntityManager em) {
