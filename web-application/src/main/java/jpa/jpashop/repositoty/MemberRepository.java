@@ -2,7 +2,6 @@ package jpa.jpashop.repositoty;
 
 import jpa.jpashop.domain.Member;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
@@ -29,6 +28,11 @@ public class MemberRepository {
         return em.createQuery("select m from Member m where m.name = :name", Member.class)
                 .setParameter("name", name)
                 .getResultList();
+    }
+
+    // 어떤 SQL 문이 날아가는지 보기 위함
+    public void flush() {
+        em.flush();
     }
 
 }
