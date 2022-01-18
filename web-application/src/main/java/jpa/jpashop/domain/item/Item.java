@@ -40,6 +40,10 @@ public abstract class Item implements TitleView{
         this.stockQuantity = restStock;
     }
 
+    // visitor 받아들이는 추상 메소드
+    public abstract void accept(Visitor visitor);
+
+
     public Long getId() {
         return id;
     }

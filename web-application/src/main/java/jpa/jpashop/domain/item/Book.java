@@ -34,4 +34,8 @@ public class Book extends Item {
         return "[ 제목:" + getName() + ", 저자: " + getAuthor() + " ]";
     }
 
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
 }

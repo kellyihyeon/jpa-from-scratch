@@ -33,4 +33,9 @@ public class Movie extends Item {
     public String getTitle() {
         return "[ 제목:" + getName() + ", 감독: " + getDirector() + ", 배우: " + getActor() + " ]";
     }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
 }

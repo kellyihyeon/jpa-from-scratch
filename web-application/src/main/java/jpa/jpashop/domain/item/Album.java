@@ -32,4 +32,9 @@ public class Album extends Item {
     public String getTitle() {
         return "[ 제목:" + getName() + ", 가수: " + getArtist() + " ]";
     }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
 }

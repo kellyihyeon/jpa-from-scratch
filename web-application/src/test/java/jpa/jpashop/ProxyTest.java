@@ -4,14 +4,14 @@ import jpa.jpashop.domain.Member;
 import jpa.jpashop.domain.OrderItem;
 import jpa.jpashop.domain.item.Book;
 import jpa.jpashop.domain.item.Item;
+import jpa.jpashop.domain.item.PrintVisitor;
+import jpa.jpashop.domain.item.TitleVisitor;
 import org.hibernate.proxy.HibernateProxy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -185,6 +185,56 @@ public class ProxyTest {
         // then
         assertTrue(item != unProxyItem);
         assertFalse(item == unProxyItem);   //
+    }
+
+    @Test
+    public void 상속관계와_프록시_VisitorPattern_사용코드() {
+        // given
+        Book book = new Book();
+        book.setName("yeongHan's_book");
+        book.setAuthor("kim");
+        em.persist(book);
+
+        OrderItem saveOrderItem = new OrderItem();
+        saveOrderItem.setItem(book);
+        em.persist(saveOrderItem);
+
+        em.flush();
+        em.clear();
+
+        // when
+        OrderItem orderItem = em.find(OrderItem.class, saveOrderItem.getId());
+        Item item = orderItem.getItem();    // item = 프록시Item
+
+        item.accept(new PrintVisitor());    // 추상 메소드
+
+
+    }
+
+    @Test
+    public void 상속관계와_프록시_TitleVisitor_사용코드() {
+        // given
+        Book book = new Book();
+        book.setName("yeongHan's_book");
+        book.setAuthor("kim");
+        em.persist(book);
+
+        OrderItem saveOrderItem = new OrderItem();
+        saveOrderItem.setItem(book);
+        em.persist(saveOrderItem);
+
+        em.flush();
+        em.clear();
+
+        // when
+        OrderItem orderItem = em.find(OrderItem.class, saveOrderItem.getId());
+        Item item = orderItem.getItem();    // item = 프록시Item
+
+        TitleVisitor titleVisitor = new TitleVisitor();
+        item.accept(titleVisitor);
+
+        String title = titleVisitor.getTitle();
+        System.out.println("TITLE = " + title);
     }
 
 
