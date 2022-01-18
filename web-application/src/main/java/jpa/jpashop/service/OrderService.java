@@ -30,8 +30,6 @@ public class OrderService {
 
         Delivery delivery = new Delivery(member.getAddress());  // 멤버 주소로 배송 엔티티를 생성
 
-        // order 와 item - 파라미터로 왜 order 는 안받지?
-        // item, item 의 가격, item 의 갯수 -> 거의 item 관련인데
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
 
         Order order = Order.createOrder(member, delivery, orderItem);

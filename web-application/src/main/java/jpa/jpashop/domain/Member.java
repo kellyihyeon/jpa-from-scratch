@@ -1,5 +1,6 @@
 package jpa.jpashop.domain;
 
+import org.hibernate.annotations.BatchSize;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class Member {
     @Embedded
     private Address address;
 
+    @BatchSize(size = 5)
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
 
