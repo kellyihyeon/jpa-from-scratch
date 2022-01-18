@@ -47,6 +47,11 @@ public class OrderItem {
         return getOrderPrice() * getCount();
     }
 
+    // title 뽑기
+    public void printItem() {
+        System.out.println("TITLE = " + item.getTitle());
+    }
+
     public Long getId() {
         return id;
     }

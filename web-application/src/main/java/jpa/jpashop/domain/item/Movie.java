@@ -28,4 +28,9 @@ public class Movie extends Item {
     public void setActor(String actor) {
         this.actor = actor;
     }
+
+    @Override
+    public String getTitle() {
+        return "[ 제목:" + getName() + ", 감독: " + getDirector() + ", 배우: " + getActor() + " ]";
+    }
 }

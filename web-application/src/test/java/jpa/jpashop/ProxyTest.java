@@ -1,11 +1,17 @@
 package jpa.jpashop;
 
 import jpa.jpashop.domain.Member;
+import jpa.jpashop.domain.OrderItem;
+import jpa.jpashop.domain.item.Book;
+import jpa.jpashop.domain.item.Item;
+import org.hibernate.proxy.HibernateProxy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -19,13 +25,6 @@ public class ProxyTest {
     @PersistenceContext
     EntityManager em;
 
-
-    private void createMemberAndFlushAndClear() {
-        Member member = new Member("Kate");
-        em.persist(member);
-        em.flush();
-        em.clear();
-    }
 
     @Test
     @Transactional
@@ -93,5 +92,117 @@ public class ProxyTest {
 
     }
 
+    @Test
+    public void 부모타입으로_프록시조회() {
+        // given
+        Book saveBook = new Book();
+        saveBook.setName("yeongHan's_book");
+        saveBook.setAuthor("kim");
+        em.persist(saveBook);
+
+        em.flush();
+        em.clear();
+
+        // when
+        // 부모타입으로 프록시 조회
+        Item proxyItem = em.getReference(Item.class, saveBook.getId());
+        System.out.println("proxyItem = " + proxyItem.getClass());
+
+        if (proxyItem instanceof Book) {    // 하위 타입으로 상위 타입의 여부를 검사한다? -> false !
+            System.out.println("proxyItem instanceof Book");
+            Book book = (Book) proxyItem;   // 강제 타입 변환 -> if 제거하더라도 ClassCastException
+            System.out.println("저자 = " + book.getAuthor());
+        }
+
+        // then
+        assertFalse(proxyItem.getClass() == Book.class);    // 패스
+        assertFalse(proxyItem instanceof Book); // pass
+        assertTrue(proxyItem instanceof Item); // pass
+    }
+
+    @Test
+    public void 상속관계와_프록시_도메인모델() {
+        // given
+        Book book = new Book();
+        book.setName("yeongHan's_book");
+        book.setAuthor("kim");
+        em.persist(book);
+
+        OrderItem saveOrderItem = new OrderItem();
+        saveOrderItem.setItem(book);
+        em.persist(saveOrderItem);
+        // orderItem2 - album
+
+        em.flush();
+        em.clear();
+
+        // when
+        OrderItem orderItem = em.find(OrderItem.class, saveOrderItem.getId());
+        Item item = orderItem.getItem();    // 전략: 지연로딩 -> 프록시 반환 (item)
+
+        System.out.println("item = " + item.getClass());    // 프록시 객체
+
+        // then
+        assertFalse(item.getClass() == Book.class);     // pass
+        assertFalse(item instanceof Book);      // pass
+        assertTrue(item instanceof Item);       // pass? Item proxy 랑 Item 객체 -> 상속받은 거니까 pass
+    }
+
+    @Test
+    public void 프록시_벗기기() {
+        // given
+        Book book = new Book();
+        book.setName("yeongHan's_book");
+        book.setAuthor("kim");
+        em.persist(book);
+
+        OrderItem saveOrderItem = new OrderItem();
+        saveOrderItem.setItem(book);
+        em.persist(saveOrderItem);
+        // orderItem2 - album
+
+        em.flush();
+        em.clear();
+
+        // when
+        OrderItem orderItem = em.find(OrderItem.class, saveOrderItem.getId());
+        orderItem.printItem();  // Item 구현체의 title 출력
+
+        Item item = orderItem.getItem();    // 전략: 지연로딩 -> 프록시 반환 (item)
+        Item unProxyItem = unProxy(item);   // 프록시를 벗기고 왜 Item 으로 받는 거지...똑같은 거 아닌가
+
+        System.out.println("orderItem.getItem().getClass() = " + orderItem.getItem().getClass());   // Item_$$_jvstcb_5 <- 프록시가 반환
+        System.out.println("unProxy(item).getClass()       = " + unProxy(item).getClass());         // Book <- 구현체가 반환
+
+
+        if (unProxyItem instanceof Book) {
+            System.out.println("proxyItem instanceof Book");
+            Book unProxyBook = (Book) unProxyItem;
+            System.out.println("저자 = " + unProxyBook.getAuthor());
+        }
+
+
+        // then
+        assertTrue(item != unProxyItem);
+        assertFalse(item == unProxyItem);   //
+    }
+
+
+
+    // 멤버 생성한 후 flush -> clear
+    private void createMemberAndFlushAndClear() {
+        Member member = new Member("Kate");
+        em.persist(member);
+        em.flush();
+        em.clear();
+    }
+
+    // 프록시에서 원본 엔티티 찾는 메소드
+    private static <T> T unProxy(Object entity) {
+        if (entity instanceof HibernateProxy) {
+            entity = ((HibernateProxy) entity).getHibernateLazyInitializer().getImplementation();
+        }
+        return (T) entity;
+    }
 
 }

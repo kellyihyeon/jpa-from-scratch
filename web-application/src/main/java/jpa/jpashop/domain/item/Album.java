@@ -27,4 +27,9 @@ public class Album extends Item {
     public void setEtc(String etc) {
         this.etc = etc;
     }
+
+    @Override
+    public String getTitle() {
+        return "[ 제목:" + getName() + ", 가수: " + getArtist() + " ]";
+    }
 }

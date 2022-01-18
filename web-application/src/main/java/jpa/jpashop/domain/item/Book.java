@@ -27,4 +27,11 @@ public class Book extends Item {
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
+
+
+    @Override
+    public String getTitle() {
+        return "[ 제목:" + getName() + ", 저자: " + getAuthor() + " ]";
+    }
+
 }
