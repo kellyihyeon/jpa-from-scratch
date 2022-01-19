@@ -30,6 +30,10 @@
 
     <!--spring framework 에서 JPA 를 사용하기 위해 등록-->
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+
+        <!--2차 캐시 설정-->
+        <property name="sharedCacheMode" value="ENABLE_SELECTIVE"/>
+
         <property name="dataSource" ref="dataSource"/>
 
         <property name="packagesToScan" value="jpa.jpashop.domain"/>    <!--@Entity 자동 검색-->

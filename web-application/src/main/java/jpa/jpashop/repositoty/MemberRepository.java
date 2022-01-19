@@ -24,6 +24,13 @@ public class MemberRepository {
         return em.createQuery("select m from Member m", Member.class).getResultList();
     }
 
+    // 쿼리 캐시
+    public List<Member> findAllWithCache() {
+        return em.createQuery("select m from Member m", Member.class)
+                            .setHint("org.hibernate.cacheable", true)
+                            .getResultList();
+    }
+
     public List<Member> findByName(String name) {
         return em.createQuery("select m from Member m where m.name = :name", Member.class)
                 .setParameter("name", name)

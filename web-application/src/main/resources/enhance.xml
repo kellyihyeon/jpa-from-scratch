@@ -1,0 +1,17 @@
+<ehcache>
+    <defaultCache maxElementsInMemory="10000"
+                  eternal="false"
+                  timeToIdleSeconds="1200"
+                  timeToLiveSeconds="1200"
+                  diskExpiryThreadIntervalSeconds="1200"
+                  memorySoreEvictionPolicy="LRU"/>
+    <cache name="jpa.jpashop.domain.Member"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToIdleSeconds="600"
+           timeToLiveSeconds="600"
+           overflowToDisk="false"/>
+    <cache name="org.hibernate.cache.spi.UpdateTimestampsCache"
+           maxElementsInMemory="10000"
+           eternal="true"/>  <!--만료되지 않게 설정-->
+</ehcache>
